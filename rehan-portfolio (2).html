@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rehan Hidayat — Portofolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f3ef;
+    --bg2: #eceae4;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --text2: #555;
+    --accent: #ff4d1c;
+    --accent2: #ff8c5a;
+    --nav-bg: rgba(245,243,239,0.85);
+    --border: rgba(0,0,0,0.08);
+    --shadow: 0 8px 40px rgba(0,0,0,0.08);
+    --tag-bg: #1a1a1a;
+    --tag-text: #fff;
+    --ticker-bg: #1a1a1a;
+    --ticker-text: #fff;
+  }
+  [data-theme="dark"] {
+    --bg: #0f0f0f;
+    --bg2: #181818;
+    --card: #1e1e1e;
+    --text: #f0ede8;
+    --text2: #999;
+    --accent: #ff4d1c;
+    --accent2: #ff8c5a;
+    --nav-bg: rgba(15,15,15,0.85);
+    --border: rgba(255,255,255,0.07);
+    --shadow: 0 8px 40px rgba(0,0,0,0.4);
+    --tag-bg: #f0ede8;
+    --tag-text: #1a1a1a;
+    --ticker-bg: #f0ede8;
+    --ticker-text: #1a1a1a;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    transition: background 0.4s, color 0.4s;
+  }
+
+  /* ── CURSOR ── */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: transform 0.1s;
+  }
+  .cursor-follower {
+    width: 36px; height: 36px;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: all 0.18s ease;
+    opacity: 0.5;
+  }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 70px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.4s, box-shadow 0.3s;
+  }
+  nav.scrolled { box-shadow: var(--shadow); }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.3rem;
+    color: var(--text);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+    animation: logoSlide 0.8s cubic-bezier(.22,1,.36,1) both;
+  }
+  .nav-logo span {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 0.85rem; font-weight: 800;
+    animation: spin 0.9s cubic-bezier(.22,1,.36,1) both 0.3s;
+  }
+  @keyframes logoSlide { from { opacity:0; transform:translateX(-30px); } to { opacity:1; transform:none; } }
+  @keyframes spin { from { transform:rotate(-180deg) scale(0); } to { transform:none; } }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 4px;
+    list-style: none;
+    animation: navDrop 0.7s cubic-bezier(.22,1,.36,1) both 0.2s;
+  }
+  @keyframes navDrop { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:none; } }
+
+  .nav-links li {
+    position: relative;
+    perspective: 400px;
+  }
+
+  /* ── FLIP CARD NAV LINK ── */
+  .nav-links a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 7px 15px;
+    border-radius: 10px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: border-color 0.3s, color 0.3s, background 0.3s;
+    z-index: 1;
+    transform-style: preserve-3d;
+  }
+
+  /* The text layers — front and back for flip */
+  .nav-links a .nl-front,
+  .nav-links a .nl-back {
+    display: block;
+    transition: transform 0.4s cubic-bezier(.22,1,.36,1), opacity 0.3s;
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .nav-links a .nl-back {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%) translateY(120%) rotateX(-90deg);
+    opacity: 0;
+    color: #fff;
+    font-weight: 800;
+    letter-spacing: 1px;
+    pointer-events: none;
+  }
+
+  /* Glow blob behind link */
+  .nav-links a::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at center, var(--accent) 0%, var(--accent2) 100%);
+    border-radius: 10px;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.35s cubic-bezier(.22,1,.36,1), transform 0.35s cubic-bezier(.22,1,.36,1);
+    z-index: -1;
+  }
+
+  /* Hover state: flip text up + fill glow */
+  .nav-links a:hover::before {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .nav-links a:hover .nl-front {
+    transform: translateY(-120%) rotateX(90deg);
+    opacity: 0;
+  }
+  .nav-links a:hover .nl-back {
+    transform: translate(-50%, -50%) translateY(0) rotateX(0deg);
+    opacity: 1;
+  }
+  .nav-links a:hover {
+    border-color: var(--accent2);
+    color: #fff;
+  }
+
+  /* Active state */
+  .nav-links a.active {
+    color: var(--accent);
+    font-weight: 700;
+    background: rgba(255,77,28,0.08);
+    border-color: rgba(255,77,28,0.25);
+  }
+  .nav-links a.active::before { opacity: 0; }
+  .nav-links a.active .nl-front { transform: none; opacity: 1; }
+  .nav-links a.active .nl-back { opacity: 0; }
+
+  /* ── ELECTRIC BORDER on hover ── */
+  .nav-links a::after {
+    content: '';
+    position: absolute; inset: -1px;
+    border-radius: 11px;
+    background: conic-gradient(
+      from var(--angle, 0deg),
+      var(--accent), var(--accent2), #fff, var(--accent), var(--accent2)
+    );
+    opacity: 0;
+    z-index: -2;
+    transition: opacity 0.3s;
+  }
+  @property --angle {
+    syntax: '<angle>'; initial-value: 0deg; inherits: false;
+  }
+  @keyframes spinBorder { to { --angle: 360deg; } }
+  .nav-links a:hover::after {
+    opacity: 0.6;
+    animation: spinBorder 1.2s linear infinite;
+  }
+
+  /* ── RIPPLE on click ── */
+  .nav-ripple {
+    position: absolute; border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    transform: scale(0);
+    animation: navRippleAnim 0.55s ease-out forwards;
+    pointer-events: none; z-index: 10;
+  }
+  @keyframes navRippleAnim { to { transform: scale(5); opacity: 0; } }
+
+  /* ── EMOJI BURST on hover ── */
+  .nav-emoji {
+    position: fixed;
+    font-size: 1.1rem;
+    pointer-events: none;
+    z-index: 9997;
+    animation: emojiFly 0.7s ease-out forwards;
+  }
+  @keyframes emojiFly {
+    0% { opacity: 1; transform: translate(0,0) scale(1); }
+    100% { opacity: 0; transform: translate(var(--ex), var(--ey)) scale(0.4) rotate(var(--er)); }
+  }
+
+  /* ── STAGGER entrance per item ── */
+  .nav-links li:nth-child(1) a { animation: navItemIn 0.6s cubic-bezier(.22,1,.36,1) both 0.3s; }
+  .nav-links li:nth-child(2) a { animation: navItemIn 0.6s cubic-bezier(.22,1,.36,1) both 0.38s; }
+  .nav-links li:nth-child(3) a { animation: navItemIn 0.6s cubic-bezier(.22,1,.36,1) both 0.46s; }
+  .nav-links li:nth-child(4) a { animation: navItemIn 0.6s cubic-bezier(.22,1,.36,1) both 0.54s; }
+  .nav-links li:nth-child(5) a { animation: navItemIn 0.6s cubic-bezier(.22,1,.36,1) both 0.62s; }
+  .nav-links li:nth-child(6) a { animation: navItemIn 0.6s cubic-bezier(.22,1,.36,1) both 0.7s; }
+  @keyframes navItemIn {
+    0% { opacity: 0; transform: translateY(-16px) scale(0.8) rotateX(-40deg); }
+    60% { transform: translateY(3px) scale(1.05) rotateX(5deg); }
+    100% { opacity: 1; transform: none; }
+  }
+
+  .nav-right {
+    display: flex; align-items: center; gap: 12px;
+    animation: navDrop 0.7s cubic-bezier(.22,1,.36,1) both 0.35s;
+  }
+
+  .theme-toggle {
+    width: 44px; height: 24px;
+    background: var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    border: 1px solid var(--border);
+    transition: background 0.3s;
+    outline: none;
+  }
+  .theme-toggle::after {
+    content: '';
+    position: absolute; top: 3px; left: 3px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    transition: transform 0.3s cubic-bezier(.22,1,.36,1);
+  }
+  [data-theme="dark"] .theme-toggle::after { transform: translateX(20px); }
+
+  .btn-nav {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600; font-size: 0.85rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    animation: btnPulse 2.5s ease-in-out infinite 1s;
+    text-decoration: none;
+  }
+  .btn-nav:hover { transform: translateY(-2px) scale(1.04); box-shadow: 0 8px 24px rgba(255,77,28,0.4); }
+  @keyframes btnPulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(255,77,28,0.3); }
+    50% { box-shadow: 0 0 0 10px rgba(255,77,28,0); }
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 100px 5% 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    overflow: hidden;
+  }
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    animation: orbFloat 8s ease-in-out infinite;
+  }
+  .orb1 { width: 500px; height: 500px; background: rgba(255,77,28,0.12); top: -100px; right: -100px; }
+  .orb2 { width: 350px; height: 350px; background: rgba(255,140,90,0.08); bottom: 0; left: -80px; animation-delay: 3s; }
+  .orb3 { width: 250px; height: 250px; background: rgba(255,77,28,0.06); top: 50%; left: 40%; animation-delay: 5s; }
+  @keyframes orbFloat {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(20px,-30px) scale(1.05); }
+    66% { transform: translate(-15px,20px) scale(0.95); }
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 60px; align-items: center;
+    max-width: 1200px; width: 100%;
+    position: relative; z-index: 1;
+  }
+
+  .hero-left {
+    display: flex; flex-direction: column; gap: 24px;
+    align-items: flex-start;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 8px 16px;
+    font-size: 0.8rem; color: var(--text2);
+    box-shadow: var(--shadow);
+    width: fit-content;
+    animation: fadeUp 0.7s cubic-bezier(.22,1,.36,1) both 0.4s;
+  }
+  .hero-badge .dot {
+    width: 8px; height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    animation: fadeUp 0.7s cubic-bezier(.22,1,.36,1) both 0.55s;
+  }
+  .hero-title .name { color: var(--accent); display: inline-block; }
+  .hero-title .wave {
+    display: inline-block;
+    animation: wave 2.5s ease-in-out infinite;
+    transform-origin: 70% 70%;
+    font-style: normal;
+  }
+  @keyframes wave {
+    0%,100%{transform:rotate(0deg)} 15%{transform:rotate(14deg)} 30%{transform:rotate(-8deg)} 40%{transform:rotate(14deg)} 50%{transform:rotate(-4deg)} 60%{transform:rotate(10deg)}
+  }
+
+  .hero-sub {
+    font-size: 1rem; color: var(--text2); line-height: 1.8;
+    max-width: 560px;
+    text-align: left;
+    animation: fadeUp 0.7s cubic-bezier(.22,1,.36,1) both 0.65s;
+  }
+
+  .hero-tags {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    animation: fadeUp 0.7s cubic-bezier(.22,1,.36,1) both 0.75s;
+  }
+  /* ── SUPER TAG ANIMATIONS ── */
+  .tag {
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    padding: 8px 18px; border-radius: 30px;
+    font-size: 0.8rem; font-weight: 700;
+    position: relative; overflow: hidden;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: transform 0.3s cubic-bezier(.22,1,.36,1), box-shadow 0.3s, letter-spacing 0.3s;
+    border: 2px solid transparent;
+    transform-style: preserve-3d;
+    user-select: none;
+  }
+  /* Shimmer sweep */
+  .tag::before {
+    content: '';
+    position: absolute; top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+    transform: skewX(-20deg);
+    transition: left 0s;
+  }
+  .tag:hover::before { left: 160%; transition: left 0.6s ease; }
+  /* Magnetic lift + glow */
+  .tag:hover {
+    transform: translateY(-5px) scale(1.08) rotate(-1deg);
+    box-shadow: 0 14px 32px rgba(255,77,28,0.35);
+    letter-spacing: 0.5px;
+  }
+  .tag:active {
+    transform: translateY(2px) scale(0.95);
+    transition-duration: 0.08s;
+  }
+  .tag.accent {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    color: #fff;
+    animation: tagBreath 2.5s ease-in-out infinite;
+  }
+  @keyframes tagBreath {
+    0%,100% { box-shadow: 0 0 0 0 rgba(255,77,28,0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(255,77,28,0); }
+  }
+  /* Particle burst on click */
+  .tag-particle {
+    position: fixed;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    animation: particleFly 0.7s ease-out forwards;
+  }
+  @keyframes particleFly {
+    to { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+  }
+  /* Tag click ripple */
+  .tag-ripple {
+    position: absolute; border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    transform: scale(0);
+    animation: tagRippleAnim 0.5s ease-out forwards;
+    pointer-events: none;
+  }
+  @keyframes tagRippleAnim { to { transform: scale(5); opacity: 0; } }
+  /* Bounce-in stagger for tags */
+  .tag:nth-child(1) { animation: tagBounce 0.6s cubic-bezier(.22,1,.36,1) both 0.8s; }
+  .tag:nth-child(2) { animation: tagBounce 0.6s cubic-bezier(.22,1,.36,1) both 0.88s; }
+  .tag:nth-child(3) { animation: tagBounce 0.6s cubic-bezier(.22,1,.36,1) both 0.96s; }
+  .tag:nth-child(4) { animation: tagBounce 0.6s cubic-bezier(.22,1,.36,1) both 1.04s; }
+  .tag:nth-child(5) { animation: tagBounce 0.6s cubic-bezier(.22,1,.36,1) both 1.12s; }
+  @keyframes tagBounce {
+    0% { opacity:0; transform: scale(0) rotate(-15deg); }
+    60% { transform: scale(1.15) rotate(3deg); }
+    80% { transform: scale(0.95) rotate(-1deg); }
+    100% { opacity:1; transform: scale(1) rotate(0); }
+  }
+
+  .hero-cta {
+    display: flex; gap: 14px; align-items: center;
+    animation: fadeUp 0.7s cubic-bezier(.22,1,.36,1) both 0.85s;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff; border: none;
+    padding: 14px 32px; border-radius: 50px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 0.95rem;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    transition: transform 0.25s, box-shadow 0.25s;
+    text-decoration: none;
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(255,77,28,0.4); }
+  .btn-primary .arrow { font-size: 1.2rem; transition: transform 0.25s; }
+  .btn-primary:hover .arrow { transform: translateX(4px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 2px solid var(--border);
+    padding: 14px 28px; border-radius: 50px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600; font-size: 0.95rem;
+    cursor: pointer;
+    transition: border-color 0.25s, color 0.25s, transform 0.25s;
+    text-decoration: none;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); }
+
+  .hero-stats {
+    display: flex; gap: 32px;
+    animation: fadeUp 0.7s cubic-bezier(.22,1,.36,1) both 0.95s;
+  }
+  .stat { display: flex; flex-direction: column; gap: 2px; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem; font-weight: 800; color: var(--accent);
+  }
+  .stat-label { font-size: 0.78rem; color: var(--text2); }
+
+  .hero-right {
+    position: relative;
+    animation: fadeScale 0.9s cubic-bezier(.22,1,.36,1) both 0.6s;
+  }
+  @keyframes fadeScale { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:none} }
+
+  .hero-photo-wrap {
+    width: 320px; height: 380px;
+    position: relative;
+  }
+  .hero-photo-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    border-radius: 60% 40% 50% 50% / 50% 50% 40% 60%;
+    animation: morphBlob 6s ease-in-out infinite;
+  }
+  @keyframes morphBlob {
+    0%,100%{border-radius:60% 40% 50% 50%/50% 50% 40% 60%}
+    25%{border-radius:50% 50% 60% 40%/40% 60% 50% 50%}
+    50%{border-radius:40% 60% 40% 60%/60% 40% 60% 40%}
+    75%{border-radius:55% 45% 45% 55%/45% 55% 55% 45%}
+  }
+  .hero-avatar {
+    position: absolute; inset: 16px;
+    border-radius: inherit;
+    overflow: hidden;
+    display: flex; align-items: flex-end; justify-content: center;
+    background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.4));
+  }
+  .avatar-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 6rem; font-weight: 800;
+    color: rgba(255,255,255,0.2);
+    background: linear-gradient(135deg, #d4cfc8, #b8b2aa);
+    position: absolute; inset: 0;
+  }
+  .avatar-initials {
+    position: absolute;
+    bottom: 20px; left: 50%; transform: translateX(-50%);
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem; font-weight: 800; color: #fff;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  }
+
+  .float-card {
+    position: absolute;
+    background: var(--card);
+    border-radius: 16px;
+    padding: 12px 18px;
+    box-shadow: var(--shadow);
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.8rem; font-weight: 600;
+    animation: cardFloat 3s ease-in-out infinite;
+    border: 1px solid var(--border);
+  }
+  .fc1 { top: 10px; left: -60px; animation-delay: 0s; }
+  .fc2 { bottom: 30px; right: -40px; animation-delay: 1.5s; }
+  @keyframes cardFloat {
+    0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)}
+  }
+  .fc-icon { font-size: 1.2rem; }
+
+  .social-float {
+    position: absolute; top: 50%; left: -55px;
+    transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .social-btn {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    font-size: 1rem;
+    box-shadow: var(--shadow);
+    transition: transform 0.25s, background 0.25s;
+    animation: socialPop 0.5s cubic-bezier(.22,1,.36,1) both;
+  }
+  .social-btn:nth-child(1){animation-delay:1s}
+  .social-btn:nth-child(2){animation-delay:1.1s}
+  .social-btn:nth-child(3){animation-delay:1.2s}
+  @keyframes socialPop { from{opacity:0;transform:scale(0)} to{opacity:1;transform:none} }
+  .social-btn:hover { transform: scale(1.15) rotate(-5deg); background: var(--accent); }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:none} }
+
+  /* ── TICKER ── */
+  .ticker {
+    background: var(--ticker-bg);
+    color: var(--ticker-text);
+    padding: 14px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-inner {
+    display: inline-flex; gap: 60px;
+    animation: tickerScroll 20s linear infinite;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600; font-size: 0.85rem;
+    letter-spacing: 0.5px;
+  }
+  .ticker-item { display: flex; align-items: center; gap: 12px; }
+  .ticker-dot { color: var(--accent); }
+  @keyframes tickerScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* ── SECTIONS ── */
+  section { padding: 100px 5%; }
+  .section-label {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .section-label::before {
+    content: '—';
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800; line-height: 1.1;
+    margin-bottom: 60px;
+  }
+  .section-title em {
+    font-style: normal; color: var(--accent);
+    position: relative;
+  }
+  .section-title em::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0; right: 0;
+    height: 3px; background: var(--accent); border-radius: 2px;
+    transform-origin: left; transform: scaleX(0);
+    transition: transform 0.4s;
+  }
+  .section-title em.visible::after { transform: scaleX(1); }
+
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  .about-text { display: flex; flex-direction: column; gap: 20px; }
+  .about-text p { color: var(--text2); line-height: 1.8; font-size: 1rem; }
+  .about-skills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .skill-chip {
+    padding: 8px 16px; border-radius: 8px;
+    background: var(--bg2); border: 1px solid var(--border);
+    font-size: 0.82rem; font-weight: 500;
+    transition: transform 0.2s, background 0.2s, color 0.2s;
+  }
+  .skill-chip:hover { background: var(--accent); color: #fff; transform: translateY(-2px); }
+
+  .about-visual {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .info-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 24px;
+    box-shadow: var(--shadow);
+    transition: transform 0.25s, box-shadow 0.25s;
+    position: relative; overflow: hidden;
+  }
+  .info-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform-origin: left; transform: scaleX(0);
+    transition: transform 0.35s;
+  }
+  .info-card:hover::before { transform: scaleX(1); }
+  .info-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.12); }
+  .info-card.span2 { grid-column: span 2; }
+  .ic-icon { font-size: 2rem; margin-bottom: 12px; }
+  .ic-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 6px; }
+  .ic-text { font-size: 0.82rem; color: var(--text2); }
+
+  /* ── SERVICES ── */
+  .services-bg { background: var(--bg2); }
+  .services-layout { display: flex; flex-direction: column; gap: 0; }
+  .service-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .service-item:first-child { border-top: 1px solid var(--border); }
+  .service-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem; font-weight: 700; color: var(--accent);
+    width: 50px;
+  }
+  .service-info { flex: 1; padding: 0 20px; }
+  .service-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem; font-weight: 700;
+    transition: color 0.2s;
+  }
+  .service-tags-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .s-tag {
+    font-size: 0.72rem; padding: 4px 10px;
+    border-radius: 20px; border: 1px solid var(--border);
+    color: var(--text2);
+  }
+  .service-arrow {
+    width: 44px; height: 44px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; color: var(--text2);
+    transition: all 0.3s;
+    flex-shrink: 0;
+  }
+  .service-item:hover .service-name { color: var(--accent); }
+  .service-item:hover .service-arrow {
+    background: var(--accent); border-color: var(--accent); color: #fff;
+    transform: rotate(-45deg);
+  }
+  .service-expanded {
+    overflow: hidden; max-height: 0;
+    transition: max-height 0.5s cubic-bezier(.22,1,.36,1), padding 0.3s;
+  }
+  .service-expanded.open { max-height: 300px; padding-bottom: 20px; }
+  .service-expanded-inner {
+    background: var(--card); border-radius: 16px; padding: 20px;
+    margin-top: 16px; border: 1px solid var(--border);
+    color: var(--text2); line-height: 1.7; font-size: 0.9rem;
+  }
+
+  /* ── PORTFOLIO ── */
+  .portfolio-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .portfolio-card {
+    border-radius: 20px; overflow: hidden;
+    background: var(--card); border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    position: relative;
+  }
+  .portfolio-card:hover { transform: translateY(-8px); box-shadow: 0 24px 60px rgba(0,0,0,0.15); }
+  .portfolio-card.featured { grid-column: span 2; }
+  .p-img {
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    position: relative;
+  }
+  .portfolio-card.featured .p-img { aspect-ratio: 2/1; }
+  .p-img-bg {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+    transition: transform 0.4s;
+  }
+  .portfolio-card:hover .p-img-bg { transform: scale(1.05); }
+  .p-img-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.6));
+    opacity: 0; transition: opacity 0.3s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .portfolio-card:hover .p-img-overlay { opacity: 1; }
+  .p-view-btn {
+    background: #fff; color: #1a1a1a;
+    padding: 10px 22px; border-radius: 24px;
+    font-weight: 600; font-size: 0.85rem;
+    transform: translateY(10px); transition: transform 0.3s;
+    text-decoration: none;
+  }
+  .portfolio-card:hover .p-view-btn { transform: none; }
+  .p-body { padding: 18px; }
+  .p-cat { font-size: 0.72rem; color: var(--accent); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+  .p-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; margin: 4px 0; }
+  .p-desc { font-size: 0.82rem; color: var(--text2); line-height: 1.6; }
+
+  /* ── EXPERIENCE ── */
+  .exp-bg { background: var(--bg); }
+  .timeline { position: relative; padding-left: 40px; }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 10px; top: 0; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .timeline-item {
+    position: relative; margin-bottom: 40px;
+    animation-play-state: paused;
+  }
+  .timeline-dot {
+    position: absolute; left: -36px; top: 6px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 2px var(--accent);
+    transition: transform 0.3s;
+  }
+  .timeline-item:hover .timeline-dot { transform: scale(1.4); }
+  .t-period { font-size: 0.75rem; color: var(--accent); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .t-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.15rem; margin-bottom: 4px; }
+  .t-org { font-size: 0.88rem; color: var(--text2); margin-bottom: 10px; }
+  .t-desc { font-size: 0.88rem; color: var(--text2); line-height: 1.7; }
+
+  /* ── CONTACT ── */
+  .contact-bg { background: var(--bg2); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+  .contact-form { display: flex; flex-direction: column; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  label { font-size: 0.82rem; font-weight: 600; color: var(--text2); }
+  input, textarea {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 16px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--text);
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s;
+  }
+  input:focus, textarea:focus {
+    border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,77,28,0.12);
+  }
+  textarea { resize: vertical; min-height: 130px; }
+
+  .contact-info { display: flex; flex-direction: column; gap: 20px; }
+  .c-info-item {
+    display: flex; gap: 16px; align-items: center;
+    padding: 16px; background: var(--card);
+    border-radius: 14px; border: 1px solid var(--border);
+    transition: transform 0.2s;
+  }
+  .c-info-item:hover { transform: translateX(6px); }
+  .c-icon { font-size: 1.4rem; width: 44px; height: 44px; border-radius: 12px; background: rgba(255,77,28,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .c-label { font-size: 0.75rem; color: var(--text2); }
+  .c-val { font-weight: 600; font-size: 0.9rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--text);
+    color: var(--bg);
+    padding: 60px 5% 30px;
+  }
+  .footer-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 40px;
+    flex-wrap: wrap; gap: 40px;
+  }
+  .footer-brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.8rem; }
+  .footer-brand span { color: var(--accent); }
+  .footer-tagline { font-size: 0.85rem; opacity: 0.5; margin-top: 6px; }
+  .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+  .footer-links a { color: var(--bg); text-decoration: none; font-size: 0.88rem; opacity: 0.6; transition: opacity 0.2s; }
+  .footer-links a:hover { opacity: 1; }
+  .footer-socials { display: flex; gap: 10px; }
+  .fsoc {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; font-size: 1.1rem; color: var(--bg);
+    transition: background 0.2s, transform 0.2s;
+  }
+  .fsoc:hover { background: var(--accent); transform: translateY(-3px); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px; text-align: center; font-size: 0.8rem; opacity: 0.4; }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1); }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:900px) {
+    .hero-inner { grid-template-columns: 1fr; text-align: center; }
+    .hero-right { display: none; }
+    .hero-cta, .hero-tags, .hero-stats { justify-content: center; }
+    .about-grid { grid-template-columns: 1fr; }
+    .portfolio-grid { grid-template-columns: 1fr 1fr; }
+    .portfolio-card.featured { grid-column: span 2; }
+    .contact-grid { grid-template-columns: 1fr; }
+  }
+  @media(max-width:600px) {
+    .nav-links { display: none; }
+    .portfolio-grid { grid-template-columns: 1fr; }
+    .portfolio-card.featured { grid-column: span 1; }
+    .about-visual { grid-template-columns: 1fr; }
+    .info-card.span2 { grid-column: span 1; }
+  }
+
+  /* ── LOADING ── */
+  .loader {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity 0.5s, visibility 0.5s;
+  }
+  .loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .loader-inner {
+    font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800;
+    display: flex; gap: 4px;
+  }
+  .loader-char {
+    display: inline-block;
+    animation: charBounce 0.6s cubic-bezier(.22,1,.36,1) both;
+  }
+  @keyframes charBounce { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:none} }
+  .loader-bar {
+    position: absolute; bottom: 0; left: 0;
+    height: 3px; background: var(--accent);
+    animation: barFill 1.5s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  @keyframes barFill { from{width:0} to{width:100%} }
+
+  /* ── BACK TO TOP ── */
+  .back-top {
+    position: fixed; bottom: 30px; right: 30px;
+    width: 50px; height: 50px;
+    background: var(--accent); color: #fff;
+    border-radius: 50%; border: none; cursor: pointer;
+    font-size: 1.2rem;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 24px rgba(255,77,28,0.4);
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+    z-index: 900;
+  }
+  .back-top.show { opacity: 1; visibility: visible; }
+  .back-top:hover { transform: translateY(-4px); }
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="loader-inner">
+    <span class="loader-char" style="animation-delay:0s;color:var(--accent)">R</span>
+    <span class="loader-char" style="animation-delay:0.05s">e</span>
+    <span class="loader-char" style="animation-delay:0.1s">h</span>
+    <span class="loader-char" style="animation-delay:0.15s">a</span>
+    <span class="loader-char" style="animation-delay:0.2s">n</span>
+    <span style="width:16px"></span>
+    <span class="loader-char" style="animation-delay:0.3s">H</span>
+    <span class="loader-char" style="animation-delay:0.35s">i</span>
+    <span class="loader-char" style="animation-delay:0.4s">d</span>
+    <span class="loader-char" style="animation-delay:0.45s">a</span>
+    <span class="loader-char" style="animation-delay:0.5s">y</span>
+    <span class="loader-char" style="animation-delay:0.55s">a</span>
+    <span class="loader-char" style="animation-delay:0.6s">t</span>
+  </div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="cursorFollower"></div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">
+    <span>RH</span>Rehan Hidayat
+  </a>
+  <ul class="nav-links">
+    <li><a href="#home" class="active" data-tip="🏠 Beranda">Beranda<span class="nav-tooltip">🏠 Home</span></a></li>
+    <li><a href="#about" data-tip="👤 Tentang">Tentang<span class="nav-tooltip">👤 About</span></a></li>
+    <li><a href="#services" data-tip="⚡ Layanan">Layanan<span class="nav-tooltip">⚡ Services</span></a></li>
+    <li><a href="#portfolio" data-tip="🎨 Karya">Portofolio<span class="nav-tooltip">🎨 Works</span></a></li>
+    <li><a href="#experience" data-tip="📅 Riwayat">Pengalaman<span class="nav-tooltip">📅 Journey</span></a></li>
+    <li><a href="#contact" data-tip="✉️ Kontak">Kontak<span class="nav-tooltip">✉️ Contact</span></a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"></button>
+    <a href="#contact" class="btn-nav">Hubungi Saya</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Tersedia untuk Kolaborasi
+      </div>
+      <h1 class="hero-title">
+        Halo, Saya<br>
+        <span class="name">Rehan Hidayat</span>
+        <span class="wave" role="img" aria-label="wave">👋</span>
+      </h1>
+      <p class="hero-sub">
+        Mahasiswa Sistem Informasi di <strong>Universitas Komputama</strong> dengan passion di bidang <strong>Graphic Design</strong>, UI/UX, dan pengembangan web. Menggabungkan kreativitas visual dengan keterampilan teknis.
+      </p>
+      <div class="hero-tags">
+        <span class="tag accent">🎨 Graphic Design</span>
+        <span class="tag">UI/UX Design</span>
+        <span class="tag">Web Development</span>
+        <span class="tag">Figma</span>
+        <span class="tag">Canva</span>
+      </div>
+      <div class="hero-cta">
+        <a href="#portfolio" class="btn-primary">
+          Lihat Portofolio <span class="arrow">→</span>
+        </a>
+        <a href="#contact" class="btn-outline">Hubungi Saya</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">150+</span>
+          <span class="stat-label">Project Selesai</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">4.9</span>
+          <span class="stat-label">Rating Klien</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">2+</span>
+          <span class="stat-label">Tahun Pengalaman</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-photo-wrap">
+        <div class="hero-photo-bg"></div>
+        <div class="hero-avatar">
+          <div class="avatar-placeholder">RH</div>
+          <div class="avatar-initials">Rehan Hidayat</div>
+        </div>
+      </div>
+      <div class="float-card fc1">
+        <span class="fc-icon">🏆</span>
+        <div>
+          <div style="font-size:0.75rem;color:var(--text2)">Pencapaian</div>
+          <div>Panitia Wisuda Ke-IV</div>
+        </div>
+      </div>
+      <div class="float-card fc2">
+        <span class="fc-icon">💼</span>
+        <div>
+          <div style="font-size:0.75rem;color:var(--text2)">Universitas</div>
+          <div>Univ. Komputama</div>
+        </div>
+      </div>
+      <div class="social-float">
+        <a href="https://www.instagram.com/rehanhdyat27" target="_blank" class="social-btn" title="Instagram">📷</a>
+        <a href="https://youtube.com/@rehanhidayat-r4o" target="_blank" class="social-btn" title="YouTube">▶️</a>
+        <a href="https://www.tiktok.com/@raann_107" target="_blank" class="social-btn" title="TikTok">🎵</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner" id="tickerInner">
+    <span class="ticker-item"><span class="ticker-dot">✦</span> UI/UX Design</span>
+    <span class="ticker-item"><span class="ticker-dot">✦</span> Graphic Design</span>
+    <span class="ticker-item"><span class="ticker-dot">✦</span> Web Development</span>
+    <span class="ticker-item"><span class="ticker-dot">✦</span> Figma Expert</span>
+    <span class="ticker-item"><span class="ticker-dot">✦</span> Desain Poster</span>
+    <span class="ticker-item"><span class="ticker-dot">✦</span> Sistem Informasi</span>
+    <span class="ticker-item"><span class="ticker-dot">✦</span> Canva Pro</span>
+    <span class="ticker-item"><span class="ticker-dot">✦</span> Konsultasi Desain</span>
+    <!-- duplicate for seamless -->
+    <span class="ticker-item"><span class="ticker-dot">✦</span> UI/UX Design</span>
+    <span class="ticker-item"><span class="ticker-dot">✦</span> Graphic Design</span>
+    <span class="ticker-item"><span class="ticker-dot">✦</span> Web Development</span>
+    <span class="ticker-item"><span class="ticker-dot">✦</span> Figma Expert</span>
+    <span class="ticker-item"><span class="ticker-dot">✦</span> Desain Poster</span>
+    <span class="ticker-item"><span class="ticker-dot">✦</span> Sistem Informasi</span>
+    <span class="ticker-item"><span class="ticker-dot">✦</span> Canva Pro</span>
+    <span class="ticker-item"><span class="ticker-dot">✦</span> Konsultasi Desain</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="section-label">Tentang Saya</div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <h2 class="section-title">Kreativitas Bertemu <em>Teknologi</em></h2>
+        <p>Halo! Saya <strong>Rehan Hidayat</strong>, mahasiswa aktif program studi Sistem Informasi di Universitas Komputama. Saya memiliki ketertarikan besar pada dunia desain grafis dan pengembangan antarmuka pengguna yang intuitif dan estetis.</p>
+        <p>Dengan kombinasi latar belakang teknis dari studi Sistem Informasi dan passion di bidang desain visual, saya mampu menciptakan solusi digital yang tidak hanya fungsional, tetapi juga memukau secara visual. Setiap project adalah kesempatan untuk belajar dan berkembang.</p>
+        <p>Saya percaya bahwa desain yang baik bukan hanya soal estetika — ia harus memecahkan masalah nyata dan memberikan pengalaman yang menyenangkan bagi pengguna.</p>
+        <div class="about-skills">
+          <span class="skill-chip">Adobe Figma</span>
+          <span class="skill-chip">Canva Pro</span>
+          <span class="skill-chip">HTML & CSS</span>
+          <span class="skill-chip">JavaScript</span>
+          <span class="skill-chip">UI/UX Research</span>
+          <span class="skill-chip">Prototyping</span>
+          <span class="skill-chip">Wireframing</span>
+          <span class="skill-chip">Desain Poster</span>
+        </div>
+      </div>
+      <div class="about-visual reveal">
+        <div class="info-card">
+          <div class="ic-icon">🎓</div>
+          <div class="ic-title">Pendidikan</div>
+          <div class="ic-text">Sistem Informasi<br>Universitas Komputama</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-icon">📍</div>
+          <div class="ic-title">Lokasi</div>
+          <div class="ic-text">Indonesia<br>Siap Remote & Onsite</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-icon">💡</div>
+          <div class="ic-title">Spesialisasi</div>
+          <div class="ic-text">Graphic Design &<br>UI/UX Design</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-icon">🚀</div>
+          <div class="ic-title">Status</div>
+          <div class="ic-text">Aktif belajar &<br>open for projects</div>
+        </div>
+        <div class="info-card span2">
+          <div class="ic-icon">🌟</div>
+          <div class="ic-title">Kegiatan Kampus</div>
+          <div class="ic-text">Aktif sebagai panitia di berbagai kegiatan universitas, termasuk PKKMB dan Wisuda Ke-IV Universitas Komputama.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="services-bg">
+  <div class="container">
+    <div class="section-label">Layanan Saya</div>
+    <h2 class="section-title reveal">Layanan yang <em>Saya Berikan</em></h2>
+    <div class="services-layout">
+      <div class="service-item reveal" onclick="toggleService(this)">
+        <span class="service-num">01.</span>
+        <div class="service-info">
+          <div class="service-name">UI/UX Design</div>
+          <div class="service-tags-row">
+            <span class="s-tag">Figma</span>
+            <span class="s-tag">Prototyping</span>
+            <span class="s-tag">User Research</span>
+          </div>
+          <div class="service-expanded">
+            <div class="service-expanded-inner">
+              Desain antarmuka yang intuitif dan estetis menggunakan Figma. Meliputi wireframing, prototyping interaktif, dan desain visual yang berfokus pada pengalaman pengguna. Pernah membuat desain aplikasi kesehatan berbasis konsultasi pasien-dokter.
+            </div>
+          </div>
+        </div>
+        <div class="service-arrow">↗</div>
+      </div>
+      <div class="service-item reveal" onclick="toggleService(this)">
+        <span class="service-num">02.</span>
+        <div class="service-info">
+          <div class="service-name">Graphic Design</div>
+          <div class="service-tags-row">
+            <span class="s-tag">Canva</span>
+            <span class="s-tag">Poster</span>
+            <span class="s-tag">Branding</span>
+            <span class="s-tag">Logo</span>
+          </div>
+          <div class="service-expanded">
+            <div class="service-expanded-inner">
+              Pembuatan desain visual menarik termasuk poster, logo, banner, dan materi branding menggunakan Canva dan tools desain lainnya. Setiap karya disesuaikan dengan kebutuhan dan identitas klien.
+            </div>
+          </div>
+        </div>
+        <div class="service-arrow">↗</div>
+      </div>
+      <div class="service-item reveal" onclick="toggleService(this)">
+        <span class="service-num">03.</span>
+        <div class="service-info">
+          <div class="service-name">Web Development</div>
+          <div class="service-tags-row">
+            <span class="s-tag">HTML/CSS</span>
+            <span class="s-tag">JavaScript</span>
+            <span class="s-tag">Responsive</span>
+          </div>
+          <div class="service-expanded">
+            <div class="service-expanded-inner">
+              Pembuatan website yang responsif dan modern menggunakan HTML, CSS, dan JavaScript. Menciptakan tampilan yang menarik dengan performa tinggi dan pengalaman pengguna yang optimal di semua perangkat.
+            </div>
+          </div>
+        </div>
+        <div class="service-arrow">↗</div>
+      </div>
+      <div class="service-item reveal" onclick="toggleService(this)">
+        <span class="service-num">04.</span>
+        <div class="service-info">
+          <div class="service-name">Desain Aplikasi Mobile</div>
+          <div class="service-tags-row">
+            <span class="s-tag">Cross-Platform</span>
+            <span class="s-tag">Figma</span>
+            <span class="s-tag">App Design</span>
+          </div>
+          <div class="service-expanded">
+            <div class="service-expanded-inner">
+              Desain tampilan aplikasi mobile yang modern dan user-friendly. Berfokus pada navigasi yang jelas, visual yang konsisten, dan pengalaman pengguna yang memuaskan di platform Android maupun iOS.
+            </div>
+          </div>
+        </div>
+        <div class="service-arrow">↗</div>
+      </div>
+      <div class="service-item reveal" onclick="toggleService(this)">
+        <span class="service-num">05.</span>
+        <div class="service-info">
+          <div class="service-name">Sistem Informasi & Database</div>
+          <div class="service-tags-row">
+            <span class="s-tag">Database</span>
+            <span class="s-tag">Analisis Sistem</span>
+            <span class="s-tag">Dokumentasi</span>
+          </div>
+          <div class="service-expanded">
+            <div class="service-expanded-inner">
+              Analisis dan perancangan sistem informasi yang efisien. Membantu dalam pembuatan dokumentasi teknis, perancangan database, dan pengembangan sistem yang mendukung operasional bisnis.
+            </div>
+          </div>
+        </div>
+        <div class="service-arrow">↗</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="container">
+    <div class="section-label">Karya Saya</div>
+    <h2 class="section-title reveal">Pilihan <em>Terbaik</em> Portofolio</h2>
+    <div class="portfolio-grid">
+      <div class="portfolio-card featured reveal">
+        <div class="p-img">
+          <div class="p-img-bg" style="background:linear-gradient(135deg,#667eea,#764ba2);font-size:4rem;">🏥</div>
+          <div class="p-img-overlay">
+            <a href="https://www.figma.com/design/SGwrjAs4ptrZgTW97iGpw7/Untitled?node-id=0-1&t=KgqXREaprAyL8RFp-1" target="_blank" class="p-view-btn">Lihat Project →</a>
+          </div>
+        </div>
+        <div class="p-body">
+          <div class="p-cat">UI/UX Design · Figma</div>
+          <div class="p-title">Aplikasi Konsultasi Kesehatan</div>
+          <div class="p-desc">Desain UI/UX untuk aplikasi kesehatan berbasis konsultasi pasien dengan dokter ahli. Dibuat menggunakan Figma dengan pendekatan user-centered design.</div>
+        </div>
+      </div>
+      <div class="portfolio-card reveal">
+        <div class="p-img">
+          <div class="p-img-bg" style="background:linear-gradient(135deg,#f6d365,#fda085);">💳</div>
+          <div class="p-img-overlay">
+            <a href="https://rehanewsasian.blogspot.com/2025/12/perkembangan-transaksi-digital-qris-di.html" target="_blank" class="p-view-btn">Lihat Project →</a>
+          </div>
+        </div>
+        <div class="p-body">
+          <div class="p-cat">Web Development · Blog</div>
+          <div class="p-title">Perkembangan Transaksi Digital QRIS</div>
+          <div class="p-desc">Artikel web tentang perkembangan transaksi digital QRIS di era modern Indonesia.</div>
+        </div>
+      </div>
+      <div class="portfolio-card reveal">
+        <div class="p-img">
+          <div class="p-img-bg" style="background:linear-gradient(135deg,#a1c4fd,#c2e9fb);">🍦</div>
+          <div class="p-img-overlay">
+            <a href="#portfolio" class="p-view-btn">Lihat Karya →</a>
+          </div>
+        </div>
+        <div class="p-body">
+          <div class="p-cat">Graphic Design · Poster</div>
+          <div class="p-title">Desain Poster Ice Cream</div>
+          <div class="p-desc">Poster promosi ice cream yang menarik dan colorful, dibuat menggunakan Canva dengan konsep visual yang segar.</div>
+        </div>
+      </div>
+      <div class="portfolio-card reveal">
+        <div class="p-img">
+          <div class="p-img-bg" style="background:linear-gradient(135deg,#84fab0,#8fd3f4);">📱</div>
+          <div class="p-img-overlay">
+            <a href="#portfolio" class="p-view-btn">Lihat Karya →</a>
+          </div>
+        </div>
+        <div class="p-body">
+          <div class="p-cat">UI/UX Design · Mobile</div>
+          <div class="p-title">Desain Aplikasi Dashboard</div>
+          <div class="p-desc">Rancangan dashboard modern dengan tampilan data yang informatif dan navigasi yang intuitif.</div>
+        </div>
+      </div>
+      <div class="portfolio-card reveal">
+        <div class="p-img">
+          <div class="p-img-bg" style="background:linear-gradient(135deg,#f093fb,#f5576c);">🎓</div>
+          <div class="p-img-overlay">
+            <a href="#portfolio" class="p-view-btn">Lihat Karya →</a>
+          </div>
+        </div>
+        <div class="p-body">
+          <div class="p-cat">Event · Kegiatan Kampus</div>
+          <div class="p-title">Wisuda Ke-IV Univ. Komputama</div>
+          <div class="p-desc">Berperan sebagai panitia dalam penyelenggaraan wisuda ke-IV Universitas Komputama yang berkesan.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="exp-bg">
+  <div class="container">
+    <div class="section-label">Pengalaman</div>
+    <h2 class="section-title reveal">Perjalanan & <em>Pengalaman</em></h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;">
+      <div>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:30px;font-size:1.1rem;color:var(--text2);text-transform:uppercase;letter-spacing:2px;">Pendidikan & Kegiatan</h3>
+        <div class="timeline">
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="t-period">2024 — Sekarang</div>
+            <div class="t-title">Mahasiswa Sistem Informasi</div>
+            <div class="t-org">Universitas Komputama</div>
+            <div class="t-desc">Mempelajari sistem informasi, manajemen data, pemrograman, dan analisis sistem. Aktif berpartisipasi dalam berbagai kegiatan kampus.</div>
+          </div>
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="t-period">2024</div>
+            <div class="t-title">Panitia Wisuda Ke-IV</div>
+            <div class="t-org">Universitas Komputama</div>
+            <div class="t-desc">Berperan sebagai panitia penyelenggara Wisuda Ke-IV Universitas Komputama, mengelola koordinasi acara dan logistik.</div>
+          </div>
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="t-period">2024</div>
+            <div class="t-title">Peserta PKKMB</div>
+            <div class="t-org">Universitas Komputama</div>
+            <div class="t-desc">Mengikuti Pengenalan Kehidupan Kampus bagi Mahasiswa Baru (PKKMB) sebagai awal perjalanan akademis.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:30px;font-size:1.1rem;color:var(--text2);text-transform:uppercase;letter-spacing:2px;">Keahlian</h3>
+        <div style="display:flex;flex-direction:column;gap:20px;" class="reveal">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-weight:600;font-size:0.9rem;">Figma / UI Design</span>
+              <span style="color:var(--accent);font-weight:700;">90%</span>
+            </div>
+            <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;">
+              <div class="skill-bar" data-width="90" style="height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;width:0;transition:width 1.2s cubic-bezier(.22,1,.36,1);"></div>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-weight:600;font-size:0.9rem;">Canva / Graphic Design</span>
+              <span style="color:var(--accent);font-weight:700;">92%</span>
+            </div>
+            <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;">
+              <div class="skill-bar" data-width="92" style="height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;width:0;transition:width 1.2s cubic-bezier(.22,1,.36,1) 0.1s;"></div>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-weight:600;font-size:0.9rem;">HTML / CSS / JS</span>
+              <span style="color:var(--accent);font-weight:700;">78%</span>
+            </div>
+            <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;">
+              <div class="skill-bar" data-width="78" style="height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;width:0;transition:width 1.2s cubic-bezier(.22,1,.36,1) 0.2s;"></div>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-weight:600;font-size:0.9rem;">UX Research</span>
+              <span style="color:var(--accent);font-weight:700;">80%</span>
+            </div>
+            <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;">
+              <div class="skill-bar" data-width="80" style="height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;width:0;transition:width 1.2s cubic-bezier(.22,1,.36,1) 0.3s;"></div>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-weight:600;font-size:0.9rem;">Analisis Sistem</span>
+              <span style="color:var(--accent);font-weight:700;">75%</span>
+            </div>
+            <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;">
+              <div class="skill-bar" data-width="75" style="height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;width:0;transition:width 1.2s cubic-bezier(.22,1,.36,1) 0.4s;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-bg">
+  <div class="container">
+    <div class="section-label">Kontak</div>
+    <h2 class="section-title reveal">Mari Berkolaborasi <em>Bersama</em></h2>
+    <div class="contact-grid">
+      <div class="reveal">
+        <form class="contact-form" onsubmit="submitForm(event)">
+          <div class="form-group">
+            <label for="name">Nama Lengkap</label>
+            <input type="text" id="name" placeholder="Nama Anda" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="email@anda.com" required>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subjek</label>
+            <input type="text" id="subject" placeholder="Tentang project / kolaborasi...">
+          </div>
+          <div class="form-group">
+            <label for="message">Pesan</label>
+            <textarea id="message" placeholder="Ceritakan tentang project Anda..." required></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="align-self:flex-start;">
+            Kirim Pesan <span class="arrow">→</span>
+          </button>
+        </form>
+        <div id="formSuccess" style="display:none;margin-top:16px;padding:16px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:12px;color:#22c55e;font-weight:600;">
+          ✅ Pesan berhasil dikirim! Saya akan segera menghubungi Anda.
+        </div>
+      </div>
+      <div class="contact-info reveal">
+        <div class="c-info-item">
+          <div class="c-icon">📧</div>
+          <div>
+            <div class="c-label">Email</div>
+            <div class="c-val">rehanhidayat@email.com</div>
+          </div>
+        </div>
+        <div class="c-info-item">
+          <div class="c-icon">📍</div>
+          <div>
+            <div class="c-label">Lokasi</div>
+            <div class="c-val">Indonesia</div>
+          </div>
+        </div>
+        <div class="c-info-item">
+          <div class="c-icon">📸</div>
+          <div>
+            <div class="c-label">Instagram</div>
+            <div class="c-val">@rehanhdyat27</div>
+          </div>
+        </div>
+        <div class="c-info-item">
+          <div class="c-icon">▶️</div>
+          <div>
+            <div class="c-label">YouTube</div>
+            <div class="c-val">@rehanhidayat-r4o</div>
+          </div>
+        </div>
+        <div class="c-info-item">
+          <div class="c-icon">🎵</div>
+          <div>
+            <div class="c-label">TikTok</div>
+            <div class="c-val">@raann_107</div>
+          </div>
+        </div>
+        <div style="padding:24px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:20px;color:#fff;">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;margin-bottom:8px;">Open for Projects!</div>
+          <div style="font-size:0.88rem;opacity:0.9;line-height:1.6;">Saya terbuka untuk proyek freelance, kolaborasi kreatif, dan peluang magang. Mari buat sesuatu yang luar biasa bersama!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">Rehan<span>.</span></div>
+      <div class="footer-tagline">Graphic Designer & UI/UX Enthusiast</div>
+    </div>
+    <div class="footer-links">
+      <a href="#home">Beranda</a>
+      <a href="#about">Tentang</a>
+      <a href="#services">Layanan</a>
+      <a href="#portfolio">Portofolio</a>
+      <a href="#contact">Kontak</a>
+    </div>
+    <div class="footer-socials">
+      <a href="https://www.instagram.com/rehanhdyat27" target="_blank" class="fsoc">📷</a>
+      <a href="https://youtube.com/@rehanhidayat-r4o" target="_blank" class="fsoc">▶️</a>
+      <a href="https://www.tiktok.com/@raann_107" target="_blank" class="fsoc">🎵</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 Rehan Hidayat. Dibuat dengan ❤️ dan kreativitas.</div>
+</footer>
+
+<!-- BACK TO TOP -->
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ── LOADER ──
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 1600);
+});
+
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const follower = document.getElementById('cursorFollower');
+let mx = 0, my = 0, fx = 0, fy = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+});
+function animFollower() {
+  fx += (mx - fx) * 0.12; fy += (my - fy) * 0.12;
+  follower.style.left = fx + 'px'; follower.style.top = fy + 'px';
+  requestAnimationFrame(animFollower);
+}
+animFollower();
+document.querySelectorAll('a,button,.service-item,.portfolio-card').forEach(el => {
+  el.addEventListener('mouseenter', () => { follower.style.transform = 'translate(-50%,-50%) scale(2)'; follower.style.opacity = '0.2'; });
+  el.addEventListener('mouseleave', () => { follower.style.transform = 'translate(-50%,-50%) scale(1)'; follower.style.opacity = '0.5'; });
+});
+
+// ── THEME TOGGLE ──
+const html = document.documentElement;
+const toggle = document.getElementById('themeToggle');
+toggle.addEventListener('click', () => {
+  html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', html.dataset.theme);
+});
+const saved = localStorage.getItem('theme');
+if (saved) html.dataset.theme = saved;
+else if (window.matchMedia('(prefers-color-scheme: dark)').matches) html.dataset.theme = 'dark';
+
+// ── NAVBAR SCROLL ──
+const nav = document.getElementById('navbar');
+const backTop = document.getElementById('backTop');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+  backTop.classList.toggle('show', window.scrollY > 400);
+  updateActiveNav();
+  revealElements();
+  animateSkillBars();
+});
+
+// ── ACTIVE NAV ──
+function updateActiveNav() {
+  const sections = document.querySelectorAll('section[id]');
+  sections.forEach(s => {
+    const top = s.offsetTop - 100;
+    const bottom = top + s.offsetHeight;
+    const link = document.querySelector(`.nav-links a[href="#${s.id}"]`);
+    if (link) link.classList.toggle('active', window.scrollY >= top && window.scrollY < bottom);
+  });
+}
+
+// ── NAV RIPPLE + LETTER SCRAMBLE ──
+const navLinks = document.querySelectorAll('.nav-links a');
+const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*!?';
+
+navLinks.forEach((link, idx) => {
+  // Stagger entrance
+  link.style.animationDelay = (0.1 + idx * 0.07) + 's';
+
+  // Letter scramble on hover
+  const originalText = link.childNodes[0].textContent.trim();
+  let scrambleTimer = null;
+  link.addEventListener('mouseenter', () => {
+    clearInterval(scrambleTimer);
+    let iteration = 0;
+    const maxIter = originalText.length * 2;
+    scrambleTimer = setInterval(() => {
+      const scrambled = originalText.split('').map((char, i) => {
+        if (char === ' ') return ' ';
+        if (i < iteration / 2) return originalText[i];
+        return chars[Math.floor(Math.random() * chars.length)].toLowerCase();
+      }).join('');
+      link.childNodes[0].textContent = scrambled;
+      iteration++;
+      if (iteration > maxIter) {
+        clearInterval(scrambleTimer);
+        link.childNodes[0].textContent = originalText;
+      }
+    }, 40);
+  });
+  link.addEventListener('mouseleave', () => {
+    clearInterval(scrambleTimer);
+    link.childNodes[0].textContent = originalText;
+  });
+
+  // Click ripple burst
+  link.addEventListener('click', e => {
+    const rect = link.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    ripple.className = 'nav-ripple';
+    const size = Math.max(rect.width, rect.height) * 1.5;
+    ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
+    link.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  });
+
+  // Magnetic hover tilt
+  link.addEventListener('mousemove', e => {
+    const rect = link.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (e.clientX - cx) / rect.width * 10;
+    const dy = (e.clientY - cy) / rect.height * 10;
+    link.style.transform = `translate(${dx}px, ${dy * 0.5}px)`;
+  });
+  link.addEventListener('mouseleave', () => {
+    link.style.transform = '';
+  });
+});
+
+// ── HERO TAG PARTICLE BURST + RIPPLE ──
+const COLORS = ['#ff4d1c','#ff8c5a','#fff','#ffcc00','#ff69b4','#00e5ff'];
+document.querySelectorAll('.tag').forEach(tag => {
+  tag.addEventListener('click', e => {
+    // Ripple inside tag
+    const rect = tag.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    ripple.className = 'tag-ripple';
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
+    tag.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+
+    // Particle burst
+    for (let i = 0; i < 14; i++) {
+      const p = document.createElement('div');
+      p.className = 'tag-particle';
+      const angle = (i / 14) * Math.PI * 2;
+      const dist = 50 + Math.random() * 60;
+      const tx = Math.cos(angle) * dist;
+      const ty = Math.sin(angle) * dist;
+      p.style.cssText = `
+        left:${e.clientX}px; top:${e.clientY}px;
+        background:${COLORS[i % COLORS.length]};
+        --tx:${tx}px; --ty:${ty}px;
+        animation-duration:${0.5+Math.random()*0.4}s;
+        width:${4+Math.random()*5}px; height:${4+Math.random()*5}px;
+      `;
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 1000);
+    }
+
+    // Bounce animation re-trigger
+    tag.style.animation = 'none';
+    tag.offsetHeight; // reflow
+    tag.style.animation = '';
+    tag.classList.add('tag-clicked');
+    setTimeout(() => tag.classList.remove('tag-clicked'), 400);
+  });
+
+  // 3D tilt on mousemove
+  tag.addEventListener('mousemove', e => {
+    const rect = tag.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const rx = (e.clientY - cy) / rect.height * -20;
+    const ry = (e.clientX - cx) / rect.width * 20;
+    tag.style.transform = `translateY(-5px) scale(1.08) perspective(300px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+  });
+  tag.addEventListener('mouseleave', () => {
+    tag.style.transform = '';
+  });
+});
+
+// ── SCROLL REVEAL ──
+function revealElements() {
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 80) {
+      el.style.transitionDelay = (i % 4) * 0.08 + 's';
+      el.classList.add('visible');
+      el.querySelectorAll('.section-title em').forEach(em => em.classList.add('visible'));
+    }
+  });
+}
+revealElements();
+
+// ── SKILL BARS ──
+let barsAnimated = false;
+function animateSkillBars() {
+  if (barsAnimated) return;
+  const section = document.getElementById('experience');
+  if (!section) return;
+  const rect = section.getBoundingClientRect();
+  if (rect.top < window.innerHeight - 100) {
+    barsAnimated = true;
+    document.querySelectorAll('.skill-bar').forEach(bar => {
+      bar.style.width = bar.dataset.width + '%';
+    });
+  }
+}
+
+// ── SERVICE TOGGLE ──
+function toggleService(el) {
+  const expanded = el.querySelector('.service-expanded');
+  const isOpen = expanded.classList.contains('open');
+  document.querySelectorAll('.service-expanded.open').forEach(e => e.classList.remove('open'));
+  if (!isOpen) expanded.classList.add('open');
+}
+
+// ── FORM SUBMIT ──
+function submitForm(e) {
+  e.preventDefault();
+  const success = document.getElementById('formSuccess');
+  e.target.style.opacity = '0.5';
+  setTimeout(() => {
+    e.target.style.display = 'none';
+    success.style.display = 'block';
+  }, 800);
+}
+
+// ── SMOOTH SCROLL FOR NAV ──
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// ── NUMBER COUNT ANIMATION ──
+function countUp(el, target, duration = 2000) {
+  let start = 0;
+  const step = target / (duration / 16);
+  const timer = setInterval(() => {
+    start += step;
+    if (start >= target) { el.textContent = target + (el.dataset.suffix || ''); clearInterval(timer); }
+    else el.textContent = Math.floor(start) + (el.dataset.suffix || '');
+  }, 16);
+}
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const nums = entry.target.querySelectorAll('.stat-num');
+      nums.forEach(n => {
+        const val = parseFloat(n.textContent);
+        if (!isNaN(val)) countUp(n, val);
+      });
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+const heroStats = document.querySelector('.hero-stats');
+if (heroStats) observer.observe(heroStats);
+
+// ── NAV ACTIVE PILL INDICATOR (sliding underline) ──
+(function() {
+  const links = document.querySelectorAll('.nav-links a');
+  const pill = document.createElement('div');
+  pill.style.cssText = `
+    position:absolute; bottom:-2px; height:2px;
+    background:var(--accent); border-radius:2px;
+    transition:left 0.35s cubic-bezier(.22,1,.36,1), width 0.35s cubic-bezier(.22,1,.36,1);
+    pointer-events:none;
+  `;
+  const navUl = document.querySelector('.nav-links');
+  navUl.style.position = 'relative';
+  navUl.appendChild(pill);
+  function movePill(link) {
+    const navRect = navUl.getBoundingClientRect();
+    const lRect = link.getBoundingClientRect();
+    pill.style.left = (lRect.left - navRect.left + 14) + 'px';
+    pill.style.width = (lRect.width - 28) + 'px';
+  }
+  links.forEach(a => {
+    a.addEventListener('mouseenter', () => movePill(a));
+  });
+  navUl.addEventListener('mouseleave', () => {
+    const active = navUl.querySelector('a.active');
+    if (active) movePill(active); else pill.style.width = '0';
+  });
+  const initActive = navUl.querySelector('a.active');
+  if (initActive) setTimeout(() => movePill(initActive), 500);
+})();
+</script>
+</body>
+</html>
