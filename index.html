@@ -527,29 +527,143 @@
     50%{border-radius:40% 60% 40% 60%/60% 40% 60% 40%}
     75%{border-radius:55% 45% 45% 55%/45% 55% 55% 45%}
   }
+  /* ══ SI AVATAR STYLES ══ */
   .hero-avatar {
     position: absolute; inset: 16px;
     border-radius: inherit;
     overflow: hidden;
     display: flex; align-items: flex-end; justify-content: center;
-    background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.4));
+    background: linear-gradient(170deg, #0f0c29 0%, #1a1a4e 40%, #24243e 100%);
+    cursor: pointer;
+    -webkit-user-select: none; user-select: none;
   }
-  .avatar-placeholder {
-    width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Syne', sans-serif;
-    font-size: 6rem; font-weight: 800;
-    color: rgba(255,255,255,0.2);
-    background: linear-gradient(135deg, #d4cfc8, #b8b2aa);
-    position: absolute; inset: 0;
+
+  /* grid scanline overlay */
+  .hero-avatar::before {
+    content: '';
+    position: absolute; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(255,77,28,.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,77,28,.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
   }
-  .avatar-initials {
+
+  /* vignette */
+  .hero-avatar::after {
+    content: '';
+    position: absolute; inset: 0; z-index: 1;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,.55) 100%);
+    pointer-events: none;
+  }
+
+  /* ── avatar SVG wrapper */
+  .av-scene {
+    position: absolute; inset: 0; z-index: 2;
+    display: flex; align-items: flex-end; justify-content: center;
+  }
+  .av-scene svg {
+    width: 88%;
+    max-height: 96%;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 28px rgba(0,0,0,.5));
+    transition: filter .3s;
+  }
+
+  /* ── orbiting ring around avatar blob */
+  .av-orbit {
     position: absolute;
-    bottom: 20px; left: 50%; transform: translateX(-50%);
+    border-radius: 50%;
+    border: 2px dashed rgba(255,77,28,.35);
+    animation: orbitSpin 12s linear infinite;
+    pointer-events: none; z-index: 1;
+  }
+  .av-orbit-1 { width: 110%; height: 110%; top: -5%; left: -5%; animation-duration: 14s; }
+  .av-orbit-2 { width: 125%; height: 125%; top: -12.5%; left: -12.5%; animation-duration: 20s; animation-direction: reverse; border-color: rgba(0,229,255,.2); }
+  @keyframes orbitSpin { to { transform: rotate(360deg); } }
+
+  /* orbit node dots */
+  .av-node {
+    position: absolute; width: 8px; height: 8px;
+    border-radius: 50%; top: 50%; left: -4px;
+    transform-origin: calc(50% + 4px) 50%;
+    box-shadow: 0 0 6px 2px currentColor;
+  }
+  .av-node-1 { background: #ff4d1c; color: #ff4d1c; }
+  .av-node-2 { background: #00e5ff; color: #00e5ff; transform-origin: calc(50% + 4px + 125%) 50%; }
+
+  /* floating code particles */
+  .av-code {
+    position: absolute; z-index: 3;
+    font-family: 'Courier New', monospace;
+    font-size: .65rem; font-weight: 700;
+    color: rgba(0,255,180,.75);
+    pointer-events: none;
+    animation: codeFloat 6s ease-in-out infinite;
+    text-shadow: 0 0 8px rgba(0,255,180,.6);
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+  .av-code-1  { top: 8%;  left: 6%;  animation-delay: 0s;   animation-duration: 5.5s; }
+  .av-code-2  { top: 20%; right: 5%; animation-delay: 1.2s; animation-duration: 6.8s; font-size:.6rem; color:rgba(255,200,0,.7); text-shadow:0 0 8px rgba(255,200,0,.5); }
+  .av-code-3  { top: 50%; left: 4%;  animation-delay: 2.5s; animation-duration: 7s;   font-size:.55rem; color:rgba(0,229,255,.7); text-shadow:0 0 8px rgba(0,229,255,.5); }
+  .av-code-4  { top: 65%; right: 4%; animation-delay: 0.8s; animation-duration: 5s;   font-size:.62rem; }
+  .av-code-5  { top: 35%; left: 7%;  animation-delay: 3.5s; animation-duration: 6s;   font-size:.58rem; color:rgba(255,100,200,.7); text-shadow:0 0 8px rgba(255,100,200,.5); }
+  @keyframes codeFloat {
+    0%,100% { transform: translateY(0px) rotate(-2deg); opacity: .7; }
+    33%      { transform: translateY(-10px) rotate(2deg); opacity: 1; }
+    66%      { transform: translateY(-5px) rotate(-1deg); opacity: .85; }
+  }
+
+  /* SI avatar body animations */
+  .av-body    { animation: avBob 3.2s ease-in-out infinite; transform-origin: bottom center; }
+  .av-head    { animation: avNod 4s ease-in-out infinite; transform-origin: center bottom; }
+  .av-hair    { animation: avHair 3s ease-in-out infinite; transform-origin: top center; }
+  .av-eye     { animation: avBlink 5s ease-in-out infinite; transform-origin: center; }
+  .av-arm-l   { animation: avTypL .5s ease-in-out infinite alternate; transform-origin: top right; }
+  .av-arm-r   { animation: avTypR .5s ease-in-out infinite alternate .25s; transform-origin: top left; }
+  .av-screen  { animation: avScreen 2s ease-in-out infinite; }
+  .av-cursor  { animation: avCursor .7s step-end infinite; }
+  .av-wifi    { animation: avWifi 1.5s ease-in-out infinite; transform-origin: bottom center; }
+  .av-signal-1 { animation: avSignal 1.5s ease-in-out infinite .1s; }
+  .av-signal-2 { animation: avSignal 1.5s ease-in-out infinite .4s; }
+  .av-signal-3 { animation: avSignal 1.5s ease-in-out infinite .7s; }
+
+  @keyframes avBob   { 0%,100%{transform:translateY(0)}   50%{transform:translateY(-6px)} }
+  @keyframes avNod   { 0%,100%{transform:rotate(0)}       30%{transform:rotate(3deg)} 70%{transform:rotate(-2deg)} }
+  @keyframes avHair  { 0%,100%{transform:skewX(0)}        40%{transform:skewX(2deg)} 70%{transform:skewX(-1.5deg)} }
+  @keyframes avBlink { 0%,88%,100%{transform:scaleY(1)}   93%,95%{transform:scaleY(.05)} }
+  @keyframes avTypL  { from{transform:rotate(-4deg) translateY(0)} to{transform:rotate(4deg) translateY(3px)} }
+  @keyframes avTypR  { from{transform:rotate(4deg) translateY(0)}  to{transform:rotate(-4deg) translateY(3px)} }
+  @keyframes avScreen{ 0%,100%{fill:#1a3a4a} 50%{fill:#1e4a5a} }
+  @keyframes avCursor{ 0%,49%{opacity:1} 50%,100%{opacity:0} }
+  @keyframes avWifi  { 0%,100%{opacity:.3;transform:scale(.9)} 50%{opacity:1;transform:scale(1)} }
+  @keyframes avSignal{ 0%,100%{opacity:.2} 50%{opacity:1} }
+
+  /* click/tap burst state */
+  .hero-avatar.clicked .av-scene svg {
+    filter: drop-shadow(0 0 30px rgba(255,77,28,.9)) drop-shadow(0 0 60px rgba(0,229,255,.5));
+  }
+
+  /* ── burst particle */
+  .av-burst { position:absolute;border-radius:50%;pointer-events:none;z-index:20;animation:avBurstFly .65s ease-out forwards; }
+  @keyframes avBurstFly { to { transform:translate(var(--bx),var(--by)) scale(0); opacity:0; } }
+
+  /* ── name badge at bottom */
+  .avatar-initials {
+    position: absolute; bottom: 16px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    background: rgba(0,0,0,.55);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,77,28,.4);
+    border-radius: 20px;
+    padding: 5px 16px;
     font-family: 'Syne', sans-serif;
-    font-size: 1.2rem; font-weight: 800; color: #fff;
+    font-size: .88rem; font-weight: 800; color: #fff;
     letter-spacing: 2px;
-    text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    white-space: nowrap;
+    box-shadow: 0 0 14px rgba(255,77,28,.3);
   }
 
   .float-card {
@@ -1033,9 +1147,267 @@
     <div class="hero-right">
       <div class="hero-photo-wrap">
         <div class="hero-photo-bg"></div>
-        <div class="hero-avatar">
-          <div class="avatar-placeholder">RH</div>
-          <div class="avatar-initials">Rehan Hidayat</div>
+        <div class="hero-avatar" id="heroAvatar" onclick="avatarClick(event)" title="Klik saya!">
+
+          <!-- orbiting rings -->
+          <div class="av-orbit av-orbit-1"><div class="av-node av-node-1"></div></div>
+          <div class="av-orbit av-orbit-2"><div class="av-node av-node-2"></div></div>
+
+          <!-- floating code snippets -->
+          <span class="av-code av-code-1">&lt;if SI/&gt;</span>
+          <span class="av-code av-code-2">SELECT *</span>
+          <span class="av-code av-code-3">{ data: ∞ }</span>
+          <span class="av-code av-code-4">01001</span>
+          <span class="av-code av-code-5">UI → DB</span>
+
+          <!-- THE MAIN SVG AVATAR -->
+          <div class="av-scene">
+            <svg viewBox="0 0 220 300" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="skinG" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fddbb4"/><stop offset="100%" stop-color="#f0a876"/>
+                </linearGradient>
+                <linearGradient id="shirtG" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1e3a5f"/><stop offset="100%" stop-color="#0d2137"/>
+                </linearGradient>
+                <linearGradient id="laptopG" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#2a2a3e"/><stop offset="100%" stop-color="#1a1a28"/>
+                </linearGradient>
+                <linearGradient id="screenG" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#0d2137"/><stop offset="100%" stop-color="#0a3050"/>
+                </linearGradient>
+                <linearGradient id="floorG" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#1a1a4e" stop-opacity=".6"/>
+                  <stop offset="100%" stop-color="#0a0a24" stop-opacity=".0"/>
+                </linearGradient>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="2" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <filter id="screenGlow">
+                  <feGaussianBlur stdDeviation="4" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+
+              <!-- floor shadow -->
+              <ellipse cx="110" cy="296" rx="70" ry="10" fill="rgba(0,0,0,.35)"/>
+              <rect x="40" y="286" width="140" height="14" rx="4" fill="url(#floorG)"/>
+
+              <!-- FULL BODY — bobs up/down -->
+              <g class="av-body">
+
+                <!-- CHAIR -->
+                <rect x="60" y="248" width="100" height="8" rx="4" fill="#252538"/>
+                <rect x="78" y="256" width="12" height="32" rx="4" fill="#1c1c2e"/>
+                <rect x="130" y="256" width="12" height="32" rx="4" fill="#1c1c2e"/>
+                <rect x="64" y="248" width="92" height="6" rx="3" fill="#2e2e48"/>
+                <rect x="72" y="200" width="76" height="52" rx="10" fill="#252538" opacity=".9"/>
+                <rect x="78" y="206" width="64" height="38" rx="7" fill="#1c1c2e" opacity=".7"/>
+
+                <!-- LEGS / PANTS -->
+                <rect x="72" y="234" width="32" height="56" rx="10" fill="#1a2640"/>
+                <rect x="116" y="234" width="32" height="56" rx="10" fill="#1a2640"/>
+                <line x1="88" y1="244" x2="88" y2="282" stroke="rgba(255,255,255,.05)" stroke-width="2"/>
+                <line x1="132" y1="244" x2="132" y2="282" stroke="rgba(255,255,255,.05)" stroke-width="2"/>
+
+                <!-- SHOES -->
+                <ellipse cx="88" cy="292" rx="22" ry="8" fill="#111118"/>
+                <ellipse cx="132" cy="292" rx="22" ry="8" fill="#111118"/>
+                <rect x="68" y="284" width="40" height="12" rx="6" fill="#1a1a26"/>
+                <rect x="112" y="284" width="40" height="12" rx="6" fill="#1a1a26"/>
+                <ellipse cx="82" cy="286" rx="9" ry="3" fill="rgba(255,255,255,.08)"/>
+                <ellipse cx="126" cy="286" rx="9" ry="3" fill="rgba(255,255,255,.08)"/>
+
+                <!-- BELT -->
+                <rect x="70" y="232" width="80" height="8" rx="4" fill="#2a3a50"/>
+                <rect x="100" y="231" width="20" height="10" rx="3" fill="#374151"/>
+                <rect x="105" y="233" width="10" height="6" rx="2" fill="#ff4d1c"/>
+
+                <!-- TORSO / SHIRT -->
+                <rect x="64" y="160" width="92" height="78" rx="16" fill="url(#shirtG)"/>
+                <polygon points="100,160 120,160 110,178" fill="#0d2137" opacity=".9"/>
+                <polygon points="100,160 80,160 90,178" fill="#0d2137" opacity=".9"/>
+                <rect x="120" y="172" width="28" height="20" rx="5" fill="rgba(255,77,28,.2)" stroke="rgba(255,77,28,.5)" stroke-width="1"/>
+                <text x="134" y="181" text-anchor="middle" font-family="monospace" font-size="5" fill="#ff4d1c" font-weight="bold">S.I.</text>
+                <text x="134" y="188" text-anchor="middle" font-family="monospace" font-size="4" fill="rgba(255,180,150,.7)">2024</text>
+                <rect x="74" y="172" width="18" height="14" rx="3" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+                <line x1="110" y1="160" x2="110" y2="200" stroke="rgba(255,77,28,.6)" stroke-width="2" stroke-dasharray="4,3"/>
+                <rect x="100" y="196" width="20" height="14" rx="3" fill="#ff4d1c" opacity=".85"/>
+                <text x="110" y="205" text-anchor="middle" font-family="monospace" font-size="5" fill="white" font-weight="bold">ID</text>
+                <rect x="68" y="162" width="28" height="50" rx="8" fill="rgba(255,255,255,.04)"/>
+
+                <!-- LEFT ARM -->
+                <g class="av-arm-l">
+                  <rect x="30" y="162" width="36" height="66" rx="14" fill="url(#shirtG)"/>
+                  <rect x="32" y="200" width="30" height="36" rx="12" fill="url(#skinG)"/>
+                  <ellipse cx="47" cy="240" rx="14" ry="10" fill="url(#skinG)"/>
+                  <rect x="36" y="240" width="7" height="14" rx="4" fill="url(#skinG)"/>
+                  <rect x="44" y="242" width="7" height="16" rx="4" fill="url(#skinG)"/>
+                  <rect x="52" y="242" width="7" height="15" rx="4" fill="url(#skinG)"/>
+                  <rect x="59" y="241" width="6" height="13" rx="4" fill="url(#skinG)"/>
+                  <ellipse cx="47" cy="241" rx="12" ry="4" fill="rgba(0,0,0,.08)"/>
+                </g>
+
+                <!-- RIGHT ARM -->
+                <g class="av-arm-r">
+                  <rect x="154" y="162" width="36" height="66" rx="14" fill="url(#shirtG)"/>
+                  <rect x="158" y="200" width="30" height="36" rx="12" fill="url(#skinG)"/>
+                  <ellipse cx="173" cy="240" rx="14" ry="10" fill="url(#skinG)"/>
+                  <rect x="157" y="240" width="6" height="13" rx="4" fill="url(#skinG)"/>
+                  <rect x="164" y="242" width="7" height="15" rx="4" fill="url(#skinG)"/>
+                  <rect x="172" y="242" width="7" height="16" rx="4" fill="url(#skinG)"/>
+                  <rect x="180" y="240" width="7" height="14" rx="4" fill="url(#skinG)"/>
+                  <ellipse cx="173" cy="241" rx="12" ry="4" fill="rgba(0,0,0,.08)"/>
+                </g>
+
+                <!-- LAPTOP BASE -->
+                <rect x="46" y="228" width="128" height="16" rx="6" fill="url(#laptopG)"/>
+                <rect x="52" y="231" width="116" height="3" rx="2" fill="rgba(255,255,255,.05)"/>
+                <rect x="52" y="235" width="116" height="3" rx="2" fill="rgba(255,255,255,.05)"/>
+                <rect x="52" y="239" width="80" height="3" rx="2" fill="rgba(255,255,255,.05)"/>
+                <rect x="88" y="234" width="44" height="7" rx="3" fill="rgba(255,255,255,.07)"/>
+                <rect x="46" y="226" width="128" height="4" rx="2" fill="#1a1a28"/>
+
+                <!-- LAPTOP SCREEN -->
+                <rect x="52" y="144" width="116" height="84" rx="10" fill="url(#laptopG)"/>
+                <rect x="58" y="150" width="104" height="72" rx="7" fill="url(#screenG)" class="av-screen" filter="url(#screenGlow)"/>
+                <!-- line numbers strip -->
+                <rect x="60" y="152" width="10" height="68" rx="0" fill="rgba(0,0,0,.3)"/>
+                <text x="65" y="161" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(255,255,255,.25)">1</text>
+                <text x="65" y="170" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(255,255,255,.25)">2</text>
+                <text x="65" y="179" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(255,255,255,.25)">3</text>
+                <text x="65" y="188" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(255,255,255,.25)">4</text>
+                <text x="65" y="197" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(255,255,255,.25)">5</text>
+                <text x="65" y="206" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(255,255,255,.25)">6</text>
+                <text x="65" y="215" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(255,255,255,.25)">7</text>
+                <!-- code content -->
+                <text x="73" y="161" font-family="monospace" font-size="6" fill="#ff7043">const</text>
+                <text x="96" y="161" font-family="monospace" font-size="6" fill="#80cbc4">rehan</text>
+                <text x="120" y="161" font-family="monospace" font-size="6" fill="white">=</text>
+                <text x="73" y="170" font-family="monospace" font-size="6" fill="white">  {</text>
+                <text x="73" y="179" font-family="monospace" font-size="6" fill="#80cbc4">  role</text>
+                <text x="101" y="179" font-family="monospace" font-size="6" fill="white">:</text>
+                <text x="106" y="179" font-family="monospace" font-size="6" fill="#a5d6a7">"SI"</text>
+                <text x="73" y="188" font-family="monospace" font-size="6" fill="#80cbc4">  nim</text>
+                <text x="97" y="188" font-family="monospace" font-size="6" fill="white">:</text>
+                <text x="102" y="188" font-family="monospace" font-size="6" fill="#fff176">2024</text>
+                <text x="73" y="197" font-family="monospace" font-size="6" fill="#80cbc4">  skill</text>
+                <text x="103" y="197" font-family="monospace" font-size="6" fill="white">:</text>
+                <text x="108" y="197" font-family="monospace" font-size="6" fill="#a5d6a7">&#x221e;</text>
+                <text x="73" y="206" font-family="monospace" font-size="6" fill="white">}</text>
+                <!-- blinking cursor -->
+                <rect class="av-cursor" x="73" y="210" width="5" height="8" rx="1" fill="#ff4d1c"/>
+                <!-- status bar -->
+                <rect x="58" y="216" width="104" height="6" rx="0" fill="rgba(255,77,28,.15)"/>
+                <text x="62" y="220" font-family="monospace" font-size="4" fill="rgba(255,77,28,.8)">&#x25CF;  SI-Portfolio  main  &#x2713;</text>
+                <!-- wifi -->
+                <g class="av-wifi" transform="translate(148,155)">
+                  <path d="M0,8 Q4,-2 8,8" stroke="rgba(0,229,255,.9)" stroke-width="1.5" fill="none" class="av-signal-3"/>
+                  <path d="M-2,10 Q4,-5 10,10" stroke="rgba(0,229,255,.6)" stroke-width="1.5" fill="none" class="av-signal-2"/>
+                  <path d="M-4,12 Q4,-8 12,12" stroke="rgba(0,229,255,.3)" stroke-width="1.5" fill="none" class="av-signal-1"/>
+                  <circle cx="4" cy="10" r="1.5" fill="rgba(0,229,255,.9)"/>
+                </g>
+                <ellipse cx="90" cy="165" rx="25" ry="10" fill="rgba(255,255,255,.03)" transform="rotate(-15 90 165)"/>
+
+                <!-- NECK -->
+                <rect x="96" y="140" width="28" height="24" rx="8" fill="url(#skinG)"/>
+                <ellipse cx="110" cy="150" rx="5" ry="4" fill="rgba(180,120,70,.3)"/>
+
+                <!-- HEAD -->
+                <g class="av-head">
+                  <ellipse cx="110" cy="106" rx="44" ry="48" fill="url(#skinG)"/>
+                  <ellipse cx="110" cy="100" rx="38" ry="42" fill="rgba(255,255,255,.06)"/>
+                  <!-- cheeks -->
+                  <ellipse cx="82" cy="118" rx="13" ry="9" fill="rgba(255,140,100,.2)"/>
+                  <ellipse cx="138" cy="118" rx="13" ry="9" fill="rgba(255,140,100,.2)"/>
+
+                  <!-- HAIR -->
+                  <g class="av-hair">
+                    <ellipse cx="110" cy="68" rx="44" ry="22" fill="#2c1a0e"/>
+                    <rect x="66" y="68" width="88" height="26" rx="0" fill="#2c1a0e"/>
+                    <rect x="66" y="75" width="16" height="32" rx="8" fill="#2c1a0e"/>
+                    <rect x="128" y="75" width="16" height="32" rx="8" fill="#2c1a0e"/>
+                    <path d="M70 75 Q90 55 110 60 Q130 55 150 75" fill="#3d2414" opacity=".6"/>
+                    <ellipse cx="100" cy="62" rx="20" ry="7" fill="rgba(255,255,255,.09)"/>
+                    <rect x="66" y="90" width="10" height="16" rx="5" fill="#2c1a0e"/>
+                    <rect x="144" y="90" width="10" height="16" rx="5" fill="#2c1a0e"/>
+                    <path d="M94 66 Q102 52 116 60 Q110 58 104 68Z" fill="#2c1a0e"/>
+                    <path d="M98 64 Q106 50 114 58" stroke="#4a2e18" stroke-width="2" fill="none" stroke-linecap="round"/>
+                  </g>
+
+                  <!-- EARS -->
+                  <ellipse cx="66" cy="106" rx="9" ry="13" fill="url(#skinG)"/>
+                  <ellipse cx="154" cy="106" rx="9" ry="13" fill="url(#skinG)"/>
+                  <ellipse cx="67" cy="106" rx="5" ry="7" fill="rgba(190,110,80,.25)"/>
+                  <ellipse cx="153" cy="106" rx="5" ry="7" fill="rgba(190,110,80,.25)"/>
+
+                  <!-- GLASSES (SI khas!) -->
+                  <g filter="url(#glow)">
+                    <rect x="76" y="97" width="28" height="20" rx="8" fill="none" stroke="#ff4d1c" stroke-width="2"/>
+                    <rect x="116" y="97" width="28" height="20" rx="8" fill="none" stroke="#ff4d1c" stroke-width="2"/>
+                    <line x1="104" y1="107" x2="116" y2="107" stroke="#ff4d1c" stroke-width="2"/>
+                    <line x1="76" y1="107" x2="66" y2="107" stroke="#ff4d1c" stroke-width="2"/>
+                    <line x1="144" y1="107" x2="154" y2="107" stroke="#ff4d1c" stroke-width="2"/>
+                    <rect x="77" y="98" width="26" height="18" rx="7" fill="rgba(0,100,200,.12)"/>
+                    <rect x="117" y="98" width="26" height="18" rx="7" fill="rgba(0,100,200,.12)"/>
+                    <line x1="80" y1="100" x2="88" y2="100" stroke="rgba(255,255,255,.4)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="120" y1="100" x2="128" y2="100" stroke="rgba(255,255,255,.4)" stroke-width="1.5" stroke-linecap="round"/>
+                  </g>
+
+                  <!-- EYEBROWS -->
+                  <rect x="80" y="92" width="22" height="4.5" rx="2.5" fill="#2c1a0e"/>
+                  <rect x="118" y="92" width="22" height="4.5" rx="2.5" fill="#2c1a0e"/>
+
+                  <!-- EYES -->
+                  <g class="av-eye">
+                    <ellipse cx="90" cy="108" rx="11" ry="10" fill="white"/>
+                    <circle cx="90" cy="109" r="7" fill="#3d2314"/>
+                    <circle cx="90" cy="110" r="4.5" fill="#1a0a00"/>
+                    <circle cx="93" cy="106" r="2.5" fill="white"/>
+                    <circle cx="88" cy="112" r="1" fill="rgba(255,255,255,.5)"/>
+                  </g>
+                  <g class="av-eye">
+                    <ellipse cx="130" cy="108" rx="11" ry="10" fill="white"/>
+                    <circle cx="130" cy="109" r="7" fill="#3d2314"/>
+                    <circle cx="130" cy="110" r="4.5" fill="#1a0a00"/>
+                    <circle cx="133" cy="106" r="2.5" fill="white"/>
+                    <circle cx="128" cy="112" r="1" fill="rgba(255,255,255,.5)"/>
+                  </g>
+
+                  <!-- NOSE -->
+                  <path d="M107 120 Q110 130 113 120" stroke="rgba(180,100,70,.8)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                  <ellipse cx="106" cy="126" rx="4" ry="3" fill="rgba(170,90,60,.2)"/>
+                  <ellipse cx="114" cy="126" rx="4" ry="3" fill="rgba(170,90,60,.2)"/>
+
+                  <!-- MOUTH -->
+                  <path d="M94 135 Q110 148 126 135" stroke="#b03020" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                  <path d="M97 136 Q110 145 123 136 Q110 148 97 136Z" fill="white" opacity=".88"/>
+                  <circle cx="92" cy="133" r="3" fill="rgba(180,90,60,.18)"/>
+                  <circle cx="128" cy="133" r="3" fill="rgba(180,90,60,.18)"/>
+                </g><!-- /head -->
+
+              </g><!-- /body -->
+
+              <!-- floating data nodes -->
+              <circle cx="20" cy="80" r="6" fill="none" stroke="#ff4d1c" stroke-width="1.5" opacity=".6">
+                <animate attributeName="opacity" values=".3;.9;.3" dur="2s" repeatCount="indefinite"/>
+                <animate attributeName="r" values="5;8;5" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="200" cy="120" r="5" fill="none" stroke="#00e5ff" stroke-width="1.5" opacity=".5">
+                <animate attributeName="opacity" values=".2;.8;.2" dur="2.5s" repeatCount="indefinite" begin=".8s"/>
+                <animate attributeName="r" values="4;7;4" dur="2.5s" repeatCount="indefinite" begin=".8s"/>
+              </circle>
+              <line x1="26" y1="80" x2="66" y2="106" stroke="rgba(255,77,28,.2)" stroke-width="1" stroke-dasharray="4,6">
+                <animate attributeName="stroke-opacity" values=".1;.5;.1" dur="3s" repeatCount="indefinite"/>
+              </line>
+              <line x1="194" y1="120" x2="154" y2="106" stroke="rgba(0,229,255,.2)" stroke-width="1" stroke-dasharray="4,6">
+                <animate attributeName="stroke-opacity" values=".1;.5;.1" dur="3s" repeatCount="indefinite" begin=".8s"/>
+              </line>
+            </svg>
+          </div><!-- /av-scene -->
+
+          <div class="avatar-initials">&#x26A1; Rehan Hidayat &#xB7; SI</div>
         </div>
       </div>
       <div class="float-card fc1">
@@ -1698,6 +2070,144 @@ function animateSkillBars() {
 }
 
 // ── SERVICE TOGGLE ──
+// ── AVATAR CLICK INTERACTION ──
+const heroAvatar = document.getElementById('heroAvatar');
+const clickResponses = [
+  { emoji: '💻', msg: 'Coding mode: ON!' },
+  { emoji: '🎨', msg: 'Design time!' },
+  { emoji: '🚀', msg: 'Launching project...' },
+  { emoji: '⚡', msg: 'Sistem Informasi!' },
+  { emoji: '🧠', msg: 'Berpikir keras...' },
+  { emoji: '✨', msg: 'Siap berkolaborasi!' },
+  { emoji: '🔥', msg: 'Full stack mode!' },
+  { emoji: '📊', msg: 'Analisis data...' }
+];
+let clickCount = 0;
+
+function avatarClick(e) {
+  const av = document.getElementById('heroAvatar');
+  const rect = av.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  // 1. Glow flash
+  av.classList.add('clicked');
+  setTimeout(() => av.classList.remove('clicked'), 600);
+
+  // 2. Avatar bounce
+  const svgEl = av.querySelector('.av-scene svg');
+  if (svgEl) {
+    svgEl.style.transition = 'transform .15s cubic-bezier(.22,1,.36,1)';
+    svgEl.style.transform = 'scale(1.15) rotate(-3deg)';
+    setTimeout(() => {
+      svgEl.style.transform = 'scale(0.95) rotate(2deg)';
+      setTimeout(() => {
+        svgEl.style.transform = '';
+        svgEl.style.transition = '';
+      }, 200);
+    }, 150);
+  }
+
+  // 3. Particle burst from click point
+  const colors = ['#ff4d1c','#ff8c5a','#00e5ff','#ffd700','#a5d6a7','#fff','#ff69b4'];
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    const angle = (i / 18) * Math.PI * 2;
+    const dist = 60 + Math.random() * 80;
+    const size = 4 + Math.random() * 7;
+    p.className = 'av-burst';
+    p.style.cssText = `
+      left: ${e.clientX}px; top: ${e.clientY}px;
+      width: ${size}px; height: ${size}px;
+      background: ${colors[i % colors.length]};
+      box-shadow: 0 0 ${size * 2}px ${colors[i % colors.length]};
+      --bx: ${Math.cos(angle) * dist}px;
+      --by: ${Math.sin(angle) * dist}px;
+      animation-duration: ${0.5 + Math.random() * 0.4}s;
+    `;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1000);
+  }
+
+  // 4. Floating emoji pop-up
+  const resp = clickResponses[clickCount % clickResponses.length];
+  clickCount++;
+  const popup = document.createElement('div');
+  popup.style.cssText = `
+    position: fixed;
+    left: ${cx}px; top: ${rect.top + 30}px;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,77,28,.5);
+    border-radius: 24px;
+    padding: 10px 20px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: .9rem;
+    color: white; white-space: nowrap;
+    z-index: 9999; pointer-events: none;
+    box-shadow: 0 0 20px rgba(255,77,28,.3);
+    animation: popupFly .9s cubic-bezier(.22,1,.36,1) forwards;
+  `;
+  popup.textContent = resp.emoji + ' ' + resp.msg;
+  document.body.appendChild(popup);
+  setTimeout(() => popup.remove(), 950);
+
+  // 5. Screen flicker on laptop
+  const screenEl = av.querySelector('.av-screen');
+  if (screenEl) {
+    screenEl.style.fill = '#00e5ff';
+    screenEl.style.transition = 'fill .1s';
+    setTimeout(() => { screenEl.style.fill = ''; screenEl.style.transition = ''; }, 120);
+  }
+
+  // 6. Code rain — brief
+  codeRain(av);
+}
+
+function codeRain(container) {
+  const chars = ['0','1','<','>','{','}','=',';','//','SI','DB','RH','↑','∞','✓'];
+  for (let i = 0; i < 8; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.style.cssText = `
+        position: absolute;
+        left: ${10 + Math.random() * 80}%;
+        top: 0; z-index: 15;
+        font-family: monospace; font-size: ${8 + Math.random()*8}px;
+        font-weight: 700;
+        color: rgba(0,255,150,${.5 + Math.random()*.5});
+        text-shadow: 0 0 8px rgba(0,255,150,.6);
+        pointer-events: none;
+        animation: rainDrop ${.6 + Math.random()*.4}s ease-in forwards;
+      `;
+      el.textContent = chars[Math.floor(Math.random() * chars.length)];
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 900);
+    }, i * 60);
+  }
+}
+
+// inject keyframes for popup and rain
+document.head.insertAdjacentHTML('beforeend', `<style>
+@keyframes popupFly {
+  0%  { opacity:0; transform:translateX(-50%) translateY(0) scale(.7); }
+  20% { opacity:1; transform:translateX(-50%) translateY(-8px) scale(1.05); }
+  70% { opacity:1; transform:translateX(-50%) translateY(-28px) scale(1); }
+  100%{ opacity:0; transform:translateX(-50%) translateY(-55px) scale(.85); }
+}
+@keyframes rainDrop {
+  0%  { opacity:0; transform:translateY(-20px) scale(1.2); }
+  20% { opacity:1; }
+  100%{ opacity:0; transform:translateY(250px) scale(.8); }
+}
+.av-burst { position:fixed; border-radius:50%; pointer-events:none; z-index:9999; animation:avBurstFly .7s ease-out forwards; }
+@keyframes avBurstFly { to { transform:translate(var(--bx),var(--by)) scale(0); opacity:0; } }
+.hero-avatar.clicked .av-scene svg {
+  filter: drop-shadow(0 0 28px rgba(255,77,28,.9)) drop-shadow(0 0 50px rgba(0,229,255,.6));
+}
+</style>`);
+
 function toggleService(el) {
   const expanded = el.querySelector('.service-expanded');
   const isOpen = expanded.classList.contains('open');
