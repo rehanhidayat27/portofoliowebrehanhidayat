@@ -1358,7 +1358,7 @@
           <span class="ol-icon">⚡</span><span class="ol-label">Layanan</span>
         </a>
         <a href="#portfolio" class="orbit-link" style="--i:3">
-          <span class="ol-icon">🎨</span><span class="ol-label">Karya</span>
+          <span class="ol-icon">🎨</span><span class="ol-label">Project</span>
         </a>
         <a href="#experience" class="orbit-link" style="--i:4">
           <span class="ol-icon">📅</span><span class="ol-label">Pengalaman</span>
@@ -1658,9 +1658,9 @@
           </div>
         </div>
         <div class="p-body">
-          <div class="p-cat">Sistem Informasi · POS · UMKM</div>
-          <div class="p-title">Sistem Kasir UMKM (POS)</div>
-          <div class="p-desc">Aplikasi Point of Sale sederhana untuk UMKM — manajemen produk, transaksi penjualan, struk digital, dan laporan harian. Didesain untuk kemudahan penggunaan oleh pelaku UMKM.</div>
+          <div class="p-cat">Sistem Informasi · POS · Cafe</div>
+          <div class="p-title">Sistem Kasir Cafe</div>
+          <div class="p-desc">Aplikasi Point of Sale sederhana untuk Cafe — manajemen menu, transaksi penjualan, struk digital, dan laporan harian. Didesain untuk kemudahan penggunaan oleh pelaku usaha cafe.</div>
           <div style="margin-top:12px;">
             <a href="https://rehanhidayat27.github.io/sistemkasirrehan27/" target="_blank" rel="noopener"
                style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#11998e,#38ef7d);color:#fff;padding:8px 18px;border-radius:24px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.8rem;text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;"
@@ -1915,12 +1915,8 @@ document.querySelectorAll('a,button,.service-item,.portfolio-card').forEach(el =
           <stop offset="0%" stop-color="rgba(215,248,255,0.38)"/>
           <stop offset="100%" stop-color="transparent"/>
         </radialGradient>
-        <filter id="fg${uid}" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur stdDeviation="1.8" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
       </defs>
-      <g filter="url(#fg${uid})">
+      <g>
         <!-- TAIL -->
         <path d="M9,19 L0,7 L7,19 L0,31 Z" fill="${finC}" opacity="0.92">
           <animateTransform attributeName="transform" type="rotate"
@@ -1951,7 +1947,7 @@ document.querySelectorAll('a,button,.service-item,.portfolio-card').forEach(el =
         <path d="M39,11 Q44,14 39,19" fill="none" stroke="rgba(255,255,255,0.17)" stroke-width="0.7"/>
         <path d="M46,13 Q50,16 46,21" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="0.65"/>
         <!-- GILL -->
-        <path d="M47,9 Q45,19 47,29" fill="none" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+        <path d="M47,9 Q45,19 47,29" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
         <!-- EYE -->
         <circle cx="52" cy="17" r="3.5" fill="rgba(4,12,32,0.94)"/>
         <circle cx="53" cy="16" r="1.3" fill="${eyeC}" opacity="0.92"/>
@@ -1962,14 +1958,10 @@ document.querySelectorAll('a,button,.service-item,.portfolio-card').forEach(el =
     return el;
   }
 
-  // 6 fish with ocean-tone palettes
+  // 2 fish with ocean-tone palettes — kept subtle so the cursor effect isn't distracting
   const SPECS = [
-    { w:54,h:34, bodyA:'#00cfff', bodyB:'#005fa0', finC:'#0072b8', eyeC:'#c8f0ff', tailDur:0.30 },
     { w:46,h:28, bodyA:'#45c8e8', bodyB:'#0058a0', finC:'#006aaa', eyeC:'#d8f4ff', tailDur:0.34 },
-    { w:40,h:25, bodyA:'#0098d0', bodyB:'#003868', finC:'#004888', eyeC:'#b8e8ff', tailDur:0.28 },
-    { w:50,h:31, bodyA:'#52d8f0', bodyB:'#006898', finC:'#0082b8', eyeC:'#d0f0ff', tailDur:0.32 },
-    { w:36,h:22, bodyA:'#00b8e8', bodyB:'#004480', finC:'#005898', eyeC:'#c0ecff', tailDur:0.38 },
-    { w:42,h:26, bodyA:'#30c0e8', bodyB:'#004e90', finC:'#006aac', eyeC:'#cceeff', tailDur:0.26 },
+    { w:34,h:21, bodyA:'#80e0f8', bodyB:'#1a6898', finC:'#2080b8', eyeC:'#e0f8ff', tailDur:0.38 },
   ];
 
   const trail = [];
@@ -2367,17 +2359,8 @@ if (heroStats) observer.observe(heroStats);
       pointer-events:none; z-index:12; overflow:visible;
     `;
 
-    // Shared defs: filters + gradients
-    canvas.innerHTML = `<defs>
-      <filter id="ofGlow" x="-60%" y="-60%" width="220%" height="220%">
-        <feGaussianBlur stdDeviation="2.5" result="b"/>
-        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="ofGlowFaint" x="-40%" y="-40%" width="180%" height="180%">
-        <feGaussianBlur stdDeviation="1.5" result="b"/>
-        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-    </defs>`;
+    // Shared defs: filters + gradients (glow filters removed to avoid dark halo artifact)
+    canvas.innerHTML = `<defs></defs>`;
     wrap.appendChild(canvas);
 
     // ── Fish species for orbit ──
@@ -2411,7 +2394,7 @@ if (heroStats) observer.observe(heroStats);
       canvas.querySelector('defs').appendChild(defs.childNodes[1]);
       canvas.querySelector('defs').appendChild(defs.childNodes[0]);
 
-      g.setAttribute('filter', `url(#ofGlow)`);
+      // (glow filter removed — was causing dark wobbling halo)
 
       // Build fish parts
       const tx = (v) => v * sc;
@@ -2451,7 +2434,7 @@ if (heroStats) observer.observe(heroStats);
           stroke="rgba(255,255,255,0.12)" stroke-width="${tx(0.65)}"/>
         <!-- GILL -->
         <path d="M${tx(47)},${tx(9)} Q${tx(45)},${tx(19)} ${tx(47)},${tx(29)}" fill="none"
-          stroke="rgba(0,0,0,0.2)" stroke-width="${tx(1)}"/>
+          stroke="rgba(255,255,255,0.18)" stroke-width="${tx(1)}"/>
         <!-- EYE -->
         <circle cx="${tx(52)}" cy="${tx(17)}" r="${tx(3.5)}" fill="rgba(4,12,30,0.94)"/>
         <circle cx="${tx(53)}" cy="${tx(16)}" r="${tx(1.3)}" fill="${sp.eyeC}" opacity="0.92"/>
